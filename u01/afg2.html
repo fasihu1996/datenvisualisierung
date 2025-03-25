@@ -1,0 +1,52 @@
+<head>
+    <!-- Load plotly.js into the DOM -->
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+</head>
+
+<body>
+    <div id="myDiv"><!-- Plotly chart will be drawn inside this DIV --></div>
+    <script>
+        var data = [
+            {
+                values: [28, 11.5, 25, 25, 10.5],
+                labels: [
+                    "Informatik",
+                    "Mathematik",
+                    "Physik, Medizin, Biologie",
+                    "Medizininformatik",
+                    "überfachliche Kompetenz   ",
+                ],
+                type: "pie",
+                insidetextorientation: "radial",
+                showlegend: false,
+                rotation: -11,
+                texttemplate: "%{label}",
+                sort: false,
+                marker: {
+                    colors: [
+                        "#0069aa",
+                        "#677ba3",
+                        "#326e1d",
+                        "#916946",
+                        "#b49f96",
+                    ],
+                    line: {
+                        color: "#ffffff",
+                        width: 3,
+                    },
+                },
+                textfont: {
+                    size: 15,
+                    color: "#ffffff",
+                },
+            },
+        ];
+
+        var layout = {
+            height: 700,
+            width: 900,
+        };
+
+        Plotly.newPlot("myDiv", data, layout);
+    </script>
+</body>
