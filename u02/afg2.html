@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <title>Übung 2 - Aufgabe 1</title>
+
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+
+    <body>
+        <div id="myDiv" style="width: 600px; height: 400px"></div>
+
+        <script>
+            function makeplot() {
+                Plotly.d3.csv(
+                    "https://raw.githubusercontent.com/plotly/datasets/refs/heads/master/titanic-mosaic-chart.csv",
+                    function (data) {
+                        processData(data);
+                    }
+                );
+            }
+
+            function processData(allRows) {
+                console.log(allRows);
+                var x = [],
+                    x1_counter = 0,
+                    x2_counter = 0,
+                    x3_counter = 0,
+                    ypos = [],
+                    yneg = [];
+
+                for (var i = 0; i < allRows.length; i++) {
+                    row = allRows[i];
+                    x.push(row["class"]);
+                    if (row["survived"] == "Yes" && row["class"] == 1) {
+                        x1_counter++;
+                    }
+                    if (row["survived"] == "Yes" && row["class"] == 2) {
+                        x2_counter++;
+                    }
+                    if (row["survived"] == "Yes" && row["class"] == 3) {
+                        x3_counter++;
+                    }
+                    ypos.push(x1_counter);
+                    ypos.push(x2_counter);
+                    ypos.push(x3_counter);
+                    yneg.push(x.length - x1_counter);
+                    yneg.push(x.length - x2_counter);
+                    yneg.push(x.length - x3_counter);
+                }
+                makePlotly(x, ypos, yneg);
+            }
+            var layout = {
+                barmode: "stack",
+            };
+
+            function makePlotly(x, ypos, yneg) {
+                var trace1 = {
+                    x: x,
+                    y: ypos,
+                    type: "bar",
+                    name: "Survived",
+                };
+                var trace2 = {
+                    x: x,
+                    y: yneg,
+                    type: "bar",
+                    name: "Not survived",
+                };
+                console.log(trace1.y, trace2.y);
+                var data = [trace1, trace2];
+
+                Plotly.newPlot("myDiv", data, layout);
+            }
+
+            makeplot();
+        </script>
+    </body>
+</html>
+
+‍
