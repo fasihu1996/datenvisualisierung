@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <title>Übung 3 - Aufgabe j</title>
+
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+
+    <body>
+        <div id="myDiv" style="width: 600px; height: 400px"></div>
+
+        <script>
+            function makeplot() {
+                Plotly.d3.csv(
+                    "https://raw.githubusercontent.com/plotly/datasets/master/iris-data.csv",
+                    function (data) {
+                        processData(data);
+                    }
+                );
+            }
+
+            function processData(allRows) {
+                console.log(allRows);
+                var x = [],
+                    y = [];
+
+                for (var i = 0; i < allRows.length; i++) {
+                    row = allRows[i];
+                    x.push(row["lifeExp"]);
+                    y.push(row["country"]);
+                }
+                console.log("X", x, "Y", y);
+                makePlotly(x, y);
+            }
+            var layout = {
+                title: {
+                    text: "Lebenserwartung in den Amerikas",
+                    font: {
+                        color: "rgb(204, 204, 204)",
+                    },
+                },
+                xaxis: {
+                    showgrid: true,
+
+                    showline: true,
+                    linecolor: "rgb(102, 102, 102)",
+                    tickfont: {
+                        font: {
+                            color: "rgb(102, 102, 102)",
+                        },
+                    },
+                    tickmode: "linear",
+                    dtick: 5,
+                    ticks: "outside",
+                    tickcolor: "rgb(102, 102, 102)",
+                },
+                margin: {
+                    l: 140,
+                    r: 40,
+                    b: 50,
+                    t: 80,
+                },
+                legend: {
+                    font: {
+                        size: 10,
+                    },
+                    yanchor: "middle",
+                    xanchor: "right",
+                },
+                width: 600,
+                height: 600,
+                hovermode: "closest",
+            };
+            var trace1 = {
+                type: "scatter",
+                mode: "markers",
+                name: "Percent of estimated voting age population",
+                marker: {
+                    color: "rgba(156, 165, 196, 0.95)",
+                    line: {
+                        color: "rgba(156, 165, 196, 1.0)",
+                        width: 1,
+                    },
+                    symbol: "circle",
+                    size: 16,
+                },
+            };
+            function makePlotly(x, y) {
+                var traces = [
+                    {
+                        x: x,
+                        y: y,
+                        type: "scatter",
+                        mode: "markers",
+                    },
+                ];
+
+                Plotly.newPlot("myDiv", traces, layout);
+            }
+
+            makeplot();
+        </script>
+    </body>
+</html>
+
+‍
