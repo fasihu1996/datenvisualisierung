@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Übung 2</title>
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+   <div id="myDiv" style="width:600px;height:400px;"></div>
+
+   <script>
+   function makeplot() {
+     Plotly.d3.csv("https://raw.githubusercontent.com/plotly/datasets/master/titanic-mosaic-chart.csv", function(data){ processData(data) } );
+   };
+
+   function processData(allRows) {
+
+     var y1 = [], y2 = [];
+     
+     y1.push(allRows.filter(x => x.class == "1" && x.survived == "Yes").length);
+     y1.push(allRows.filter(x => x.class == "2" && x.survived == "Yes").length);
+     y1.push(allRows.filter(x => x.class == "3" && x.survived == "Yes").length);
+
+     y2.push(allRows.filter(x => x.class == "1" && x.survived == "No").length);
+     y2.push(allRows.filter(x => x.class == "2" && x.survived == "No").length);
+     y2.push(allRows.filter(x => x.class == "3" && x.survived == "No").length);
+
+     makePlotly( y1, y2 );
+   };
+
+   function makePlotly( y1, y2 ){
+     var trace1 = {
+       x: ['1. Klasse', '2. Klasse', '3. Klasse'],
+       y: y1,
+       type: 'bar',
+       name: 'Überlebt'
+     };
+
+     var trace2 = {
+       x: ['1. Klasse', '2. Klasse', '3. Klasse'],
+       y: y2,
+       type: 'bar',
+       name: 'Nicht-überlebt'
+     };
+
+     var data = [trace1, trace2];
+     var layout = {barmode: 'stack'};
+
+     Plotly.newPlot('myDiv', data, layout, {
+       title: {
+           text: 'Übung 2 Aufgabe 2'
+       }
+   });
+   };
+
+   makeplot()
+
+   </script>
+
+</body>
+
+</html>
+
+‍
