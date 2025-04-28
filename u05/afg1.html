@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <title>Übung 3 - Aufgabe j</title>
+
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+
+    <body>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+            <div id="myDiv" style="width: 100%; height: 300px"></div>
+            <div id="myDiv2" style="width: 100%; height: 300px"></div>
+            <div id="myDiv3" style="width: 100%; height: 300px"></div>
+            <div id="myDiv4" style="width: 100%; height: 300px"></div>
+        </div>
+
+        <script>
+            const source =
+                "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/flights.csv";
+            function makeplot() {
+                Plotly.d3.csv(source, function (data) {
+                    processData(data);
+                });
+            }
+
+            function processData(allRows) {
+                console.log(allRows);
+                var x = [],
+                    y = [],
+                    z = [];
+
+                allRows.forEach((row) => {
+                    if (!x.includes(row["year"])) {
+                        x.push(row["year"]);
+                    }
+                    if (!y.includes(row["month"])) {
+                        y.push(row["month"]);
+                    }
+                });
+
+                x.forEach((year) => {
+                    var row = [];
+                    y.forEach((month) => {
+                        const entry = allRows.find(
+                            (r) => r["year"] === year && r["month"] === month
+                        );
+                        row.push(entry ? parseInt(entry["passengers"]) : null);
+                    });
+                    z.push(row);
+                });
+
+                console.log("X", x, "Y", y, "Z", z);
+                makePlotly(x, y, z);
+            }
+
+            var layout = {
+                title: {
+                    text: "Passagierzahlen auf Flügen",
+                    font: {
+                        color: "rgb(0, 0, 0)",
+                    },
+                },
+                xaxis: {
+                    title: "Jahr",
+                    showgrid: true,
+                    showline: true,
+                    linecolor: "rgb(102, 102, 102)",
+                    tickfont: {
+                        color: "rgb(102, 102, 102)",
+                    },
+                    tickmode: "linear",
+                    dtick: 1,
+                    ticks: "outside",
+                    tickcolor: "rgb(102, 102, 102)",
+                },
+                yaxis: {
+                    title: "Monat",
+                    showgrid: true,
+                    showline: true,
+                    linecolor: "rgb(102, 102, 102)",
+                    tickfont: {
+                        color: "rgb(102, 102, 102)",
+                    },
+                },
+                margin: {
+                    l: 140,
+                    r: 40,
+                    b: 50,
+                    t: 80,
+                },
+                legend: {
+                    font: {
+                        size: 10,
+                    },
+                    yanchor: "middle",
+                    xanchor: "right",
+                },
+                width: 700,
+                height: 400,
+                hovermode: "closest",
+            };
+
+            function makePlotly(x, y, z) {
+                var traces = [
+                    {
+                        x: x,
+                        y: y,
+                        z: z,
+                        type: "heatmap",
+                        colorscale: "Viridis",
+                    },
+                ];
+
+                // Use the existing layout for the first plot
+                Plotly.newPlot("myDiv", traces, layout);
+
+                // Create a new layout for the second plot with a modified title
+                var layout2 = JSON.parse(JSON.stringify(layout)); // Deep copy
+                layout2.title.text = "Passagierzahlen auf Flügen (Graustufen)";
+                traces[0].colorscale = "Greys";
+
+                Plotly.newPlot("myDiv2", traces, layout2);
+
+                // Create a new layout for the second plot with a modified title
+                var layout3 = JSON.parse(JSON.stringify(layout)); // Deep copy
+                layout3.title.text = "Passagierzahlen auf Flügen (Jet)";
+                traces[0].colorscale = "Jet";
+
+                Plotly.newPlot("myDiv3", traces, layout3);
+
+                // Create a new layout for the second plot with a modified title
+                var layout4 = JSON.parse(JSON.stringify(layout)); // Deep copy
+                layout4.title.text = "Passagierzahlen auf Flügen (Portland)";
+                traces[0].colorscale = "Portland";
+
+                Plotly.newPlot("myDiv4", traces, layout4);
+            }
+
+            makeplot();
+        </script>
+    </body>
+</html>
