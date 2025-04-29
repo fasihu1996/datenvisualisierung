@@ -4,13 +4,13 @@
     <head>
         <meta charset="UTF-8" />
 
-        <title>Übung 3 - Aufgabe j</title>
+        <title>Übung 5 - Aufgabe 1</title>
 
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     </head>
 
     <body>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 150px">
             <div id="myDiv" style="width: 100%; height: 300px"></div>
             <div id="myDiv2" style="width: 100%; height: 300px"></div>
             <div id="myDiv3" style="width: 100%; height: 300px"></div>
@@ -20,6 +20,7 @@
         <script>
             const source =
                 "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/flights.csv";
+            const localSource = "./flights.csv";
             function makeplot() {
                 Plotly.d3.csv(source, function (data) {
                     processData(data);
@@ -41,9 +42,9 @@
                     }
                 });
 
-                x.forEach((year) => {
+                y.forEach((month) => {
                     var row = [];
-                    y.forEach((month) => {
+                    x.forEach((year) => {
                         const entry = allRows.find(
                             (r) => r["year"] === year && r["month"] === month
                         );
@@ -77,7 +78,10 @@
                     tickcolor: "rgb(102, 102, 102)",
                 },
                 yaxis: {
-                    title: "Monat",
+                    title: {
+                        text: "Monat",
+                        standoff: 15,
+                    },
                     showgrid: true,
                     showline: true,
                     linecolor: "rgb(102, 102, 102)",
@@ -111,6 +115,13 @@
                         z: z,
                         type: "heatmap",
                         colorscale: "Viridis",
+                    },
+                ];
+
+                var histoTrace = [
+                    {
+                        y: y,
+                        type: "histogramm",
                     },
                 ];
 
