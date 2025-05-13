@@ -10,7 +10,7 @@
     </head>
 
     <body>
-        <div id="myDiv" style="width: 1200px; height: 800px"></div>
+        <div id="myDiv" style="width: 90vw; height: 90vh"></div>
 
         <script>
             function makeplot() {
@@ -43,7 +43,7 @@
                                         y: [point.AAPL_y],
                                     },
                                 ],
-                                traces: [1], // This corresponds to the marker trace (index 1)
+                                traces: [1],
                             };
                         });
 
@@ -60,9 +60,9 @@
                                             {
                                                 mode: "immediate",
                                                 fromcurrent: true,
-                                                transition: { duration: 300 },
+                                                transition: { duration: 0 },
                                                 frame: {
-                                                    duration: 300,
+                                                    duration: 50,
                                                     redraw: true,
                                                 },
                                             },
@@ -144,11 +144,15 @@
                     },
                 ];
 
-                Plotly.newPlot("myDiv", traces, {
+                const layout = {
                     title: {
                         text: "Aktienkurs von Apple",
                     },
-                });
+                    yaxis: { fixedrange: true },
+                    xaxis: { fixedrange: true },
+                };
+
+                Plotly.newPlot("myDiv", traces, layout);
             }
 
             makeplot();
