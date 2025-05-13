@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <title>Apple-Kurs animiert</title>
+
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+
+    <body>
+        <div id="myDiv" style="width: 1200px; height: 800px"></div>
+
+        <script>
+            function makeplot() {
+                Plotly.d3.csv(
+                    "https://raw.githubusercontent.com/plotly/datasets/master/2014_apple_stock.csv",
+                    function (data) {
+                        processData(data);
+                    }
+                );
+            }
+
+            function processData(allRows) {
+                console.log(allRows);
+                var x = [],
+                    y = [];
+
+                for (var i = 0; i < allRows.length; i++) {
+                    row = allRows[i];
+                    x.push(row["AAPL_x"]);
+                    y.push(row["AAPL_y"]);
+                }
+                console.log("X", x, "Y", y);
+                makePlotly(x, y);
+            }
+
+            function makePlotly(x, y) {
+                const traces = [
+                    {
+                        x: x,
+                        y: y,
+                    },
+                ];
+
+                Plotly.newPlot("myDiv", traces, {
+                    title: {
+                        text: "Aktienkurs von Apple",
+                    },
+                });
+            }
+
+            makeplot();
+            const markerShared = {
+                marker: { color: "black", size: 10 },
+                showlegend: false,
+                mode: "markers",
+            };
+            const markerData = [
+                { x: ["2014-06-30"], y: [90.8909], ...markerShared },
+            ];
+
+            Plotly.addTraces("myDiv", markerData);
+
+            // Code snippet to add buttons for control
+            // Add buttons for control
+            const updatemenus = [
+                {
+                    buttons: [
+                        {
+                            method: "animate",
+                            args: [
+                                null,
+                                {
+                                    mode: "immediate",
+                                    fromcurrent: true,
+                                    transition: { duration: 0 },
+                                    frame: { duration: 100, redraw: false },
+                                },
+                            ],
+                            label: "Play",
+                        },
+                        {
+                            method: "animate",
+                            args: [
+                                [null],
+                                {
+                                    mode: "immediate",
+                                    transition: { duration: 0 },
+                                    frame: { duration: 0, redraw: false },
+                                },
+                            ],
+                            label: "Pause",
+                        },
+                        {
+                            method: "animate",
+                            args: [
+                                [frames[0].name],
+                                {
+                                    mode: "immediate",
+                                    transition: { duration: 0 },
+                                    frame: { duration: 0, redraw: false },
+                                },
+                            ],
+                            label: "Reset",
+                        },
+                    ],
+                    type: "buttons",
+                    pad: { t: -50, r: 100 },
+                    x: 0.1,
+                    y: 1.1,
+                },
+            ];
+
+            Plotly.update("plotContainer", {}, { updatemenus: updatemenus });
+        </script>
+    </body>
+</html>
+
+‍
