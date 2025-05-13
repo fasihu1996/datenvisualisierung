@@ -18,6 +18,20 @@
                     "https://raw.githubusercontent.com/plotly/datasets/master/2014_apple_stock.csv",
                     function (data) {
                         processData(data);
+                        const markerShared = {
+                            marker: { color: "black", size: 10 },
+                            showlegend: false,
+                            mode: "markers",
+                        };
+                        const markerData = [
+                            {
+                                x: [data[0].AAPL_x],
+                                y: [data[0].AAPL_y],
+                                ...markerShared,
+                            },
+                        ];
+
+                        Plotly.addTraces("myDiv", markerData);
                     }
                 );
             }
@@ -52,16 +66,6 @@
             }
 
             makeplot();
-            const markerShared = {
-                marker: { color: "black", size: 10 },
-                showlegend: false,
-                mode: "markers",
-            };
-            const markerData = [
-                { x: ["2014-06-30"], y: [90.8909], ...markerShared },
-            ];
-
-            Plotly.addTraces("myDiv", markerData);
 
             // Code snippet to add buttons for control
             // Add buttons for control
