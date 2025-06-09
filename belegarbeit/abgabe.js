@@ -32,7 +32,7 @@ async function createEnhancedMap() {
         Thüringen: "Thueringen",
     };
 
-    // Create slider UI
+    // update slider
     let slider = document.getElementById("year-slider");
     slider.min = 0;
     slider.max = years.length - 1;
@@ -47,6 +47,7 @@ async function createEnhancedMap() {
         updateMap();
     };
 
+    // get dropdown selection
     const attributeDropdown = document.getElementById("attribute-dropdown");
     attributeDropdown.onchange = function () {
         updateMap();
@@ -63,7 +64,7 @@ async function createEnhancedMap() {
             data = sunshineData;
         }
         const row = data[yearIdx];
-        // Map: state name -> value for selected year
+        // map values to state names
         const map = new Map();
         for (const [geoName, csvCol] of Object.entries(stateMap)) {
             let val = row[csvCol];
@@ -81,7 +82,7 @@ async function createEnhancedMap() {
         const stateValues = getStateValues(currentYearIndex);
         const selectedAttribute = attributeDropdown.value;
 
-        // Default values
+        // default values
         let colorscale = "Viridis";
         let zmin = 6,
             zmax = 12,
@@ -143,6 +144,7 @@ async function createEnhancedMap() {
                 },
                 thickness: 15,
                 len: 0.7,
+                tickformat: ".0f",
             },
             zmin: zmin,
             zmax: zmax,
@@ -158,13 +160,12 @@ async function createEnhancedMap() {
                 visible: false,
                 projection: { type: "mercator" },
             },
-            margin: { t: 60, b: 0, l: 0, r: 0 },
+            margin: { t: 60, b: 0, l: 0, r: 100 },
         };
 
         Plotly.newPlot("map", [trace], layout, { responsive: true });
     }
 
-    // Initial render
     updateMap();
 }
 
