@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+
+        <title>Übung 8 - Aufgabe 1</title>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script
+            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
+            charset="UTF-8"
+        ></script>
+    </head>
+
+    <body>
+        <div>
+            <div style="margin: 10px">
+                <label
+                    id="year-label"
+                    style="
+                        font-weight: bold;
+                        margin-left: 10px;
+                        vertical-align: middle;
+                    "
+                    >Year: 2024</label
+                >
+                <input
+                    type="range"
+                    id="year-slider"
+                    style="width: 300px; margin: 20px; vertical-align: middle"
+                />
+                <label for="attribute-dropdown">Select attribute</label>
+                <select
+                    name="attribute-dropdown"
+                    id="attribute-dropdown"
+                    style="vertical-align: middle"
+                >
+                    <option value="percipitation">Percipitation</option>
+                    <option value="airtemp">Air Temperature</option>
+                    <option value="sunshine">Sunshine Duration</option>
+                </select>
+            </div>
+            <div id="map" style="width: 40vw; height: 90vh"></div>
+        </div>
+        <div id="diagram" style="width: 40vw; height: 90vh"></div>
+
+        <script src="seite.js"></script>
+    </body>
+</html>
