@@ -5,30 +5,32 @@
 <head>
     <meta charset="UTF-8" />
 
-    <title>Übung 8 - Aufgabe 1</title>
+    <title>Belegarbeit</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="UTF-8"></script>
+    <link href="abgabe.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div>
-        <div style="margin: 10px">
-            <label id="year-label" style="
-                        font-weight: bold;
-                        margin-left: 10px;
-                        vertical-align: middle;
-                    ">Year: 2024</label>
-            <input type="range" id="year-slider" style="width: 300px; margin: 20px; vertical-align: middle" />
-            <label for="attribute-dropdown">Select attribute</label>
-            <select name="attribute-dropdown" id="attribute-dropdown" style="vertical-align: middle">
-                <option value="percipitation">Percipitation</option>
-                <option value="airtemp">Air Temperature</option>
-                <option value="sunshine">Sunshine Duration</option>
-            </select>
-        </div>
-        <div id="map" style="width: 40vw; height: 90vh"></div>
+    <div class="controls">
+        <label id="year-label">Year: 2024</label>
+        <input type="range" id="year-slider" class="year-slider" />
+        <label for="attribute-dropdown" class="dropdown-label">Select attribute</label>
+        <select class="dropdown" name="attribute-dropdown" id="attribute-dropdown">
+            <option value="percipitation">Percipitation</option>
+            <option value="airtemp">Air Temperature</option>
+            <option value="sunshine">Sunshine Duration</option>
+        </select>
     </div>
-    <div id="diagram" style="width: 40vw; height: 90vh"></div>
+    <div id="main-flex">
+        <div id="map-container">
+
+            <div id="map"></div>
+        </div>
+        <div id="diagram-container">
+            <div id="diagram"></div>
+        </div>
+    </div>
 
     <script src="abgabe.js"></script>
 </body>
