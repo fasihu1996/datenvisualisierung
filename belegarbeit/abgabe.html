@@ -13,8 +13,12 @@
 
 <body>
     <div class="controls">
+        <button id="play-button" class="play-button">Play</button>
         <label id="year-label">Year: 2024</label>
-        <input type="range" id="year-slider" class="year-slider" />
+        <div class="slider-container">
+            <input type="range" id="year-slider" class="year-slider" />
+            <div id="year-slider-labels" class="year-slider-labels"></div>
+        </div>
         <label for="attribute-dropdown" class="dropdown-label">Select attribute</label>
         <select class="dropdown" name="attribute-dropdown" id="attribute-dropdown">
             <option value="percipitation">Percipitation</option>

@@ -1,8 +1,6 @@
 async function createEnhancedMap() {
     // geojson data, high detail, for German states
-    const geojson = await d3.json(
-        "https://raw.githubusercontent.com/isellsoap/deutschlandGeoJSON/main/2_bundeslaender/1_sehr_hoch.geo.json"
-    );
+    const geojson = await d3.json("bundeslaender.geojson");
 
     // using local csv file converted from txt file
     const airTempData = await d3.dsv(";", "airTemp.csv");
@@ -32,11 +30,47 @@ async function createEnhancedMap() {
         Thüringen: "Thueringen",
     };
 
-    // update slider
     let slider = document.getElementById("year-slider");
     slider.min = 0;
     slider.max = years.length - 1;
     slider.value = currentYearIndex;
+
+    // Dynamically generate datalist ticks for the slider
+    let datalist = document.getElementById("year-ticks");
+    if (!datalist) {
+        datalist = document.createElement("datalist");
+        datalist.id = "year-ticks";
+        slider.setAttribute("list", "year-ticks");
+        slider.parentNode.insertBefore(datalist, slider.nextSibling);
+    }
+    datalist.innerHTML = "";
+    years.forEach((year, idx) => {
+        // Show label every 5 years, first and last year
+        if (idx % 5 === 0 || idx === 0 || idx === years.length - 1) {
+            let option = document.createElement("option");
+            option.value = idx;
+            option.label = year;
+            datalist.appendChild(option);
+        }
+    });
+    let labelsContainer = document.getElementById("year-slider-labels");
+    if (labelsContainer) {
+        labelsContainer.innerHTML = "";
+        years.forEach((year, idx) => {
+            if (idx % 5 === 0 || idx === years.length - 1) {
+                const span = document.createElement("span");
+                span.style.flex = "1";
+                span.textContent = year;
+                span.style.position = "relative";
+                labelsContainer.appendChild(span);
+            } else {
+                // Add empty span for spacing
+                const span = document.createElement("span");
+                span.style.flex = "1";
+                labelsContainer.appendChild(span);
+            }
+        });
+    }
 
     let label = document.getElementById("year-label");
     label.innerText = `Year: ${years[currentYearIndex]}`;
@@ -164,6 +198,10 @@ async function createEnhancedMap() {
             },
             margin: { t: 60, b: 0, l: 0, r: 100 },
             dragmode: false,
+            font: {
+                family: "Franklin Gothic Medium",
+                size: 25,
+            },
         };
 
         Plotly.newPlot("map", [trace], layout, { responsive: true });
@@ -181,56 +219,38 @@ async function createEnhancedMap() {
         );
 
         const selectedAttribute = attributeDropdown.value;
-        let yValues,
-            colorscale,
-            zmin,
-            zmax,
-            colorbarTitle,
-            hoverUnit,
-            layoutTitle,
-            yAxisTitle,
-            line,
-            markerColor;
+        let yValues, layoutTitle, yAxisTitle, line, markerColor, range, dtick;
 
         if (selectedAttribute === "percipitation") {
             yValues = percipitationAverages;
-            colorscale = "Blues";
-            zmin = 400;
-            zmax = 1200;
-            colorbarTitle = "Percipitation (mm)";
-            hoverUnit = "mm";
             layoutTitle = `Average Percipitation in Germany (${years[0]}–${
                 years[years.length - 1]
             })`;
             yAxisTitle = "Percipitation (mm)";
             line = { color: "blue", width: 0.5 };
             markerColor = "blue";
+            range = [500, 1000];
+            dtick = 50;
         } else if (selectedAttribute === "sunshine") {
             yValues = sunshineAverages;
-            colorscale = "YlOrRd";
-            zmin = 1200;
-            zmax = 2200;
-            colorbarTitle = "Sunshine Duration (h)";
-            hoverUnit = "h";
             layoutTitle = `Average Sunshine Duration in Germany (${years[0]}–${
                 years[years.length - 1]
             })`;
             yAxisTitle = "Sunshine Duration (h)";
             line = { color: "orange", width: 0.5 };
             markerColor = "orange";
+            range = [1300, 2100];
+            dtick = 50;
         } else if (selectedAttribute === "airtemp") {
             yValues = airTempAverages;
-            colorscale = "Hot";
-            zmin = 6;
-            zmax = 12;
-            colorbarTitle = "Air Temperature (°C)";
-            hoverUnit = "°C";
             layoutTitle = `Average Air Temperature in Germany (${years[0]}–${
                 years[years.length - 1]
             })`;
             yAxisTitle = "Air Temperature (°C)";
             line = { color: "red", width: 0.5 };
             markerColor = "red";
+            range = [6, 14];
+            dtick = 0.5;
         }
 
         // trace
@@ -239,7 +259,7 @@ async function createEnhancedMap() {
             mode: "lines+markers",
             x: years,
             y: yValues,
-            line: { shape: "linear", color: markerColor },
+            line: line,
             marker: { size: 6, color: markerColor },
             name: "Average",
             hoverinfo: "x+y",
@@ -269,15 +289,21 @@ async function createEnhancedMap() {
             xaxis: {
                 title: "Year",
                 tickmode: "linear",
-                dtick: 1,
+                dtick: 5,
             },
             yaxis: {
                 title: yAxisTitle,
-                rangemode: "tozero",
+                rangemode: "normal",
+                range: range,
+                dtick: dtick,
             },
             margin: { t: 60, b: 60, l: 60, r: 40 },
             dragmode: false,
             showlegend: false,
+            font: {
+                family: "Franklin Gothic Medium",
+                size: 18,
+            },
         };
 
         Plotly.newPlot(
@@ -311,5 +337,29 @@ async function createEnhancedMap() {
     updateMap();
     updatePlot();
 }
+
+let playInterval = null;
+
+document.getElementById("play-button").onclick = function () {
+    if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+        this.textContent = "Play";
+        return;
+    }
+    this.textContent = "Pause";
+    playInterval = setInterval(() => {
+        let slider = document.getElementById("year-slider");
+        let current = +slider.value;
+        if (current < slider.max) {
+            slider.value = current + 1;
+            slider.dispatchEvent(new Event("input"));
+        } else {
+            clearInterval(playInterval);
+            playInterval = null;
+            this.textContent = "Play";
+        }
+    }, 200);
+};
 
 createEnhancedMap();

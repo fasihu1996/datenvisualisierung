@@ -40,28 +40,72 @@ body {
 }
 
 .year-slider {
-    width: 70vw;
-    margin: 20px;
+    width: 100%;
+    max-width: 60vw;
+    min-width: 200px;
+    margin: 20px 0 0 0;
     vertical-align: middle;
 }
 
 .dropdown {
     width: 10vw;
+    min-width: 120px;
+    max-width: 180px;
+    padding-right: 10px;
 }
 
 .dropdown-label {
-    margin: 20px;
+    margin: 10px;
 }
 
 .controls {
-    vertical-align: middle;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 95%;
     box-sizing: border-box;
     margin: 10px auto;
-    width: 95vw;
-    height: 10vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-radius: 10px;
-    border-style: dotted;
+    border-style: dashed;
+    gap: 1vw;
+    flex-wrap: wrap;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 400px;
+    min-width: 250px;
+    max-width: 60vw;
+}
+
+.year-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    color: #222;
+    pointer-events: none;
+    user-select: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.year-slider-labels span {
+    width: 100%;
+    min-width: 2em;
+    text-align: center;
+    margin-top: 2px;
+}
+
+.play-button {
+    width: 5vw;
+    height: 5vh;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
