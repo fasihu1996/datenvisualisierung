@@ -53,22 +53,46 @@ async function createEnhancedMap() {
             datalist.appendChild(option);
         }
     });
+
+    // Improved label positioning for better alignment
     let labelsContainer = document.getElementById("year-slider-labels");
     if (labelsContainer) {
         labelsContainer.innerHTML = "";
-        years.forEach((year, idx) => {
-            if (idx % 5 === 0 || idx === years.length - 1) {
-                const span = document.createElement("span");
-                span.style.flex = "1";
-                span.textContent = year;
-                span.style.position = "relative";
-                labelsContainer.appendChild(span);
-            } else {
-                // Add empty span for spacing
-                const span = document.createElement("span");
-                span.style.flex = "1";
-                labelsContainer.appendChild(span);
-            }
+
+        // Create container with absolute positioning
+        labelsContainer.style.position = "relative";
+        labelsContainer.style.width = "100%";
+        labelsContainer.style.height = "20px";
+        labelsContainer.style.marginTop = "5px";
+
+        // Filter which years to show labels for
+        const labeledYears = years.filter(
+            (year, idx) => idx % 5 === 0 || idx === years.length - 1
+        );
+        const labeledIndices = years
+            .map((year, idx) =>
+                idx % 5 === 0 || idx === years.length - 1 ? idx : -1
+            )
+            .filter((idx) => idx !== -1);
+
+        // Calculate positions
+        const totalTicks = years.length - 1; // Number of intervals on slider
+
+        labeledIndices.forEach((yearIdx, i) => {
+            const year = years[yearIdx];
+            const span = document.createElement("span");
+
+            // Position as percentage of slider width
+            const percentage = (yearIdx / totalTicks) * 100;
+
+            span.textContent = year;
+            span.style.position = "absolute";
+            span.style.left = `${percentage}%`;
+            span.style.transform = "translateX(-50%)"; // Center the label on tick
+            span.style.textAlign = "center";
+            span.style.fontSize = "0.9em";
+
+            labelsContainer.appendChild(span);
         });
     }
 
@@ -199,8 +223,8 @@ async function createEnhancedMap() {
             margin: { t: 60, b: 0, l: 0, r: 100 },
             dragmode: false,
             font: {
-                family: "Franklin Gothic Medium",
-                size: 25,
+                family: "Lucida Sans",
+                size: 14,
             },
         };
 
@@ -301,8 +325,8 @@ async function createEnhancedMap() {
             dragmode: false,
             showlegend: false,
             font: {
-                family: "Franklin Gothic Medium",
-                size: 18,
+                family: "Lucida Sans",
+                size: 14,
             },
         };
 
